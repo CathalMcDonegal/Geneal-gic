@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Genealògic</title>
+<meta name="theme-color" content="#2f6b4a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Genealògic">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f4efe4;--band:#efe9db;--surface:#fffdf8;--text:#2a2823;--muted:#857f70;--line:#a79f8a;--bd:#ddd5c0;--accent:#2f6b4a;--accent-t:#fff;
+--m:#4d82b3;--f:#c8607c;--o:#8a9a7b;--dot:#d9d1bd;--shadow:0 2px 8px rgba(60,50,20,.12)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#181a17;--band:#1e211d;--surface:#2a2d27;--text:#eeeadd;--muted:#a09b8b;--line:#6f6b5e;--bd:#3f4139;--accent:#86c29c;--accent-t:#10201a;--m:#6b9fd0;--f:#e07f9b;--o:#a3b394;--dot:#2c2f29;--shadow:0 2px 10px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{--bg:#181a17;--band:#1e211d;--surface:#2a2d27;--text:#eeeadd;--muted:#a09b8b;--line:#6f6b5e;--bd:#3f4139;--accent:#86c29c;--accent-t:#10201a;--m:#6b9fd0;--f:#e07f9b;--o:#a3b394;--dot:#2c2f29;--shadow:0 2px 10px rgba(0,0,0,.4)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box}
+body{margin:0;height:100%;background:var(--bg);color:var(--text);font:15px/1.4 Inter,system-ui,sans-serif;display:flex;flex-direction:column}
+header{padding:10px 12px;background:var(--surface);border-bottom:1px solid var(--bd);display:flex;flex-wrap:wrap;gap:8px;align-items:center;box-shadow:var(--shadow);z-index:2}
+h1{font:700 1.25rem Fraunces,Georgia,serif;margin:0;flex:1 1 auto;white-space:nowrap}
+h1 small{display:block;font:400 .72rem Inter,sans-serif;color:var(--muted)}
+button,select,input,textarea{font:inherit;color:var(--text)}
+button{border:1px solid var(--bd);background:var(--surface);padding:8px 13px;border-radius:10px;cursor:pointer;box-shadow:var(--shadow)}
+button.p{background:var(--accent);color:var(--accent-t);border-color:var(--accent);font-weight:600}
+button.d{color:#c24632}
+#q{flex:1 1 100%;order:5;padding:9px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg)}
+#wrap{flex:1;overflow:auto;position:relative;background-image:radial-gradient(var(--dot) 1.2px,transparent 1.3px);background-size:22px 22px}
+#empty{position:absolute;inset:0;display:none;flex-direction:column;gap:14px;align-items:center;justify-content:center;text-align:center;color:var(--muted);padding:24px}
+#empty b{font:700 1.5rem Fraunces,Georgia,serif;color:var(--text)}
+#zoom{position:fixed;right:12px;bottom:calc(14px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:6px;z-index:3}
+#zoom button{width:42px;height:42px;padding:0;font-size:1.2rem;border-radius:50%}
+#stats{position:fixed;left:12px;bottom:calc(14px + env(safe-area-inset-bottom,0px));background:var(--surface);border:1px solid var(--bd);border-radius:20px;padding:6px 12px;font-size:.78rem;color:var(--muted);box-shadow:var(--shadow);z-index:3}
+.c{cursor:pointer;transition:opacity .2s}
+.c .card{fill:var(--surface);stroke:var(--bd);stroke-width:1.2;filter:drop-shadow(0 2px 4px rgba(60,50,20,.15))}
+.c:hover .card{stroke:var(--accent);stroke-width:2}
+.c .n{fill:var(--text);font:600 14px Inter,sans-serif}
+.c .y{fill:var(--muted);font:400 12px Inter,sans-serif}
+.c .i{fill:#fff;font:700 18px Fraunces,Georgia,serif}
+.band{fill:var(--band)}.bl{fill:var(--muted);font:600 10px Inter,sans-serif;letter-spacing:.12em}
+dialog{border:1px solid var(--bd);border-radius:16px;background:var(--surface);color:var(--text);width:min(94vw,440px);max-height:92vh;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+dialog strong{font:700 1.15rem Fraunces,Georgia,serif}
+label{display:block;font-size:.76rem;color:var(--muted);margin-top:10px}
+input,select,textarea{width:100%;padding:9px;border:1px solid var(--bd);border-radius:9px;background:var(--bg);margin-top:3px}
+textarea{height:80px;resize:vertical}
+#ta{height:180px;font:12px monospace}
+.r{display:flex;gap:8px;margin-top:14px;justify-content:flex-end;flex-wrap:wrap}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ph{display:flex;align-items:center;gap:12px;margin-top:10px}
+#pv{width:64px;height:64px;border-radius:50%;background:var(--o) center/cover;display:flex;align-items:center;justify-content:center;color:#fff;font:700 1.4rem Fraunces,serif;flex:none}
+.rel{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px dashed var(--bd)}
+.rel button{font-size:.8rem;padding:6px 10px}
+</style>
+</head>
+<body>
+<header>
+<h1>🌳 Genealògic<small id="sub"></small></h1>
+<button id="th" title="Tema">◐</button>
+<button id="bk">Còpia</button>
+<button class="p" id="add">+ Persona</button>
+<input id="q" type="search" placeholder="Cerca una persona…">
+</header>
+<div id="wrap">
+<div id="empty"><b>Comença la teva història</b><span>Afegeix la primera persona o carrega una família d’exemple.</span><div><button class="p" id="e1">+ Primera persona</button> <button id="e2">Carrega l’exemple</button></div></div>
+<svg id="svg"></svg>
+</div>
+<div id="stats"></div>
+<div id="zoom"><button id="zi">+</button><button id="zo">−</button><button id="zf" title="Ajusta">⤢</button></div>
+
+<dialog id="dlg"><strong id="ft">Persona</strong>
+<div class="ph"><div id="pv"></div><div><input type="file" id="fi" accept="image/*" style="display:none"><button id="pb">📷 Foto</button> <button id="px">Treu</button></div></div>
+<label>Nom complet<input id="n" autocomplete="off"></label>
+<div class="g"><label>Naixement<input id="b" placeholder="any"></label><label>Defunció<input id="x" placeholder="any"></label></div>
+<label>Sexe<select id="s"><option value="o">—</option><option value="m">Home</option><option value="f">Dona</option></select></label>
+<div class="g"><label>Pare<select id="fa"></select></label><label>Mare<select id="mo"></select></label></div>
+<label>Parella<select id="sp"></select></label>
+<label>Notes<textarea id="nt" placeholder="Lloc de naixement, ofici, anècdotes…"></textarea></label>
+<div class="rel" id="rel"><button data-k="pa">+ Pare/mare</button><button data-k="sp">+ Parella</button><button data-k="ch">+ Fill/a</button></div>
+<div class="r"><button class="d" id="del">Elimina</button><button id="cn">Cancel·la</button><button class="p" id="sv">Desa</button></div>
+</dialog>
+
+<dialog id="bd"><strong>Còpia de seguretat</strong>
+<label>Dades (JSON)<textarea id="ta"></textarea></label>
+<div class="r"><button id="cp">Copia</button><button id="ld">Carrega</button><button id="bc">Tanca</button></div></dialog>
+
+<script>
+const KEY='arbre-genealogic-v1';
+let P=[],cur=null,Z=1,ph='',Q='',LL=null;
+try{P=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){P=[]}
+const $=id=>document.getElementById(id);
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}};
+const uid=()=>Math.random().toString(36).slice(2,9);
+const W=176,H=82,GX=34,GY=84,PAD=44;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ini=n=>(n||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+const DEMO=[{id:'a1',n:'Josep Ferrer',b:'1938',x:'2015',s:'m',sp:'a2'},{id:'a2',n:'Maria Soler',b:'1941',s:'f',sp:'a1'},{id:'b1',n:'Pere Ferrer',b:'1965',s:'m',fa:'a1',mo:'a2',sp:'b2'},{id:'b2',n:'Laia Puig',b:'1968',s:'f',sp:'b1'},{id:'b3',n:'Anna Ferrer',b:'1970',s:'f',fa:'a1',mo:'a2'},{id:'c1',n:'Marc Ferrer',b:'1994',s:'m',fa:'b1',mo:'b2'},{id:'c2',n:'Júlia Ferrer',b:'1997',s:'f',fa:'b1',mo:'b2'}];
+
+function layout(){
+  const by=Object.fromEntries(P.map(p=>[p.id,p])),g={};
+  P.forEach(p=>g[p.id]=0);
+  for(let i=0;i<P.length+2;i++)P.forEach(p=>{
+    const ps=[p.fa,p.mo].filter(x=>by[x]);
+    if(ps.length)g[p.id]=Math.max(g[p.id],...ps.map(x=>g[x]+1));
+    if(by[p.sp]){const m=Math.max(g[p.id],g[p.sp]);g[p.id]=m;g[p.sp]=m}
+  });
+  const rows=[],pos={},out=[];let maxW=0;
+  P.forEach(p=>(rows[g[p.id]]=rows[g[p.id]]||[]).push(p));
+  rows.forEach((row,gi)=>{
+    if(!row)return;const used=new Set(),units=[];
+    row.forEach(p=>{
+      if(used.has(p.id))return;used.add(p.id);
+      const u=[p];if(by[p.sp]&&!used.has(p.sp)&&g[p.sp]===gi){used.add(p.sp);u.push(by[p.sp])}
+      const xs=u.flatMap(q=>[q.fa,q.mo]).filter(x=>pos[x]!=null).map(x=>pos[x]);
+      units.push({u,k:xs.length?xs.reduce((a,b)=>a+b)/xs.length:1e9});
+    });
+    units.sort((a,b)=>a.k-b.k);
+    const list=units.flatMap(x=>x.u);out[gi]=list;maxW=Math.max(maxW,list.length*(W+GX));
+    const off=PAD;list.forEach((p,i)=>pos[p.id]=off+i*(W+GX)+W/2);
+  });
+  out.forEach((list,gi)=>{ // centra cada fila
+    if(!list)return;const off=(maxW-list.length*(W+GX))/2;
+    list.forEach(p=>pos[p.id]+=off);
+  });
+  return{by,g,pos,n:rows.length,w:maxW+PAD*2-GX,h:rows.length*(H+GY)+PAD};
+}
+function render(){
+  $('empty').style.display=P.length?'none':'flex';
+  $('stats').style.display=$('zoom').style.display=P.length?'':'none';
+  const L=layout(),Y=g=>PAD+g*(H+GY);LL=L;
+  const TW=Math.max(L.w,320),q=Q.toLowerCase();
+  let s='<defs>';
+  P.filter(p=>p.ph).forEach(p=>s+=`<clipPath id="k${p.id}"><circle cx="${L.pos[p.id]-W/2+38}" cy="${Y(L.g[p.id])+H/2}" r="26"/></clipPath>`);
+  s+='</defs>';
+  for(let i=0;i<L.n;i++){
+    s+=`<rect class="band" x="0" y="${Y(i)-GY/2}" width="${TW}" height="${H+GY}" opacity="${i%2?0:.7}"/>`+
+       `<text class="bl" x="12" y="${Y(i)-GY/2+16}">GENERACIÓ ${i+1}</text>`;
+  }
+  P.forEach(p=>{
+    const cx=L.pos[p.id],cy=Y(L.g[p.id]),ps=[p.fa,p.mo].filter(x=>L.by[x]);
+    if(ps.length){
+      const both=ps.length>1,px=ps.reduce((a,x)=>a+L.pos[x],0)/ps.length;
+      const y0=Y(L.g[ps[0]])+(both?H/2:H),m=(y0+cy)/2;
+      s+=`<path d="M${px} ${y0}C${px} ${m} ${cx} ${m} ${cx} ${cy}" fill="none" stroke="var(--line)" stroke-width="2" stroke-linecap="round"/>`;
+    }
+    if(L.by[p.sp]&&p.id<p.sp){
+      const a=L.pos[p.id],b=L.pos[p.sp],mx=(a+b)/2,my=cy+H/2;
+      s+=`<path d="M${a} ${my}H${b}" stroke="var(--line)" stroke-width="2.5"/><text x="${mx}" y="${my+5}" text-anchor="middle" font-size="15" fill="var(--f)">♥</text>`;
+    }
+  });
+  P.forEach(p=>{
+    const x=L.pos[p.id]-W/2,y=Y(L.g[p.id]),col=`var(--${p.s||'o'})`;
+    const yrs=p.b&&p.x?`${p.b} – ${p.x}`:p.b?`n. ${p.b}`:p.x?`† ${p.x}`:'';
+    const hit=!q||(p.n||'').toLowerCase().includes(q);
+    const nm=(p.n||'Sense nom');
+    s+=`<g class="c" data-id="${p.id}" opacity="${hit?1:.25}"><title>${esc(nm)}</title>`+
+      `<rect class="card" x="${x}" y="${y}" width="${W}" height="${H}" rx="16"${q&&hit?' style="stroke:var(--accent);stroke-width:3"':''}/>`+
+      `<rect x="${x}" y="${y+14}" width="5" height="${H-28}" rx="2.5" fill="${col}"/>`+
+      `<circle cx="${x+38}" cy="${y+H/2}" r="26" fill="${col}"/>`+
+      (p.ph?`<image href="${p.ph}" x="${x+12}" y="${y+H/2-26}" width="52" height="52" preserveAspectRatio="xMidYMid slice" clip-path="url(#k${p.id})"/>`:
+        `<text class="i" x="${x+38}" y="${y+H/2+6}" text-anchor="middle">${esc(ini(p.n))}</text>`)+
+      `<text class="n" x="${x+72}" y="${y+H/2-3}">${esc(nm.length>15?nm.slice(0,14)+'…':nm)}</text>`+
+      `<text class="y" x="${x+72}" y="${y+H/2+16}">${esc(yrs)}</text></g>`;
+  });
+  const svg=$('svg');
+  svg.setAttribute('viewBox',`0 0 ${TW} ${Math.max(L.h,200)}`);
+  svg.setAttribute('width',TW*Z);svg.setAttribute('height',Math.max(L.h,200)*Z);
+  svg.innerHTML=s;
+  svg.querySelectorAll('.c').forEach(el=>el.onclick=()=>edit(el.dataset.id));
+  $('stats').textContent=`${P.length} persones · ${L.n} generacions`;
+  $('sub').textContent=P.length?'La teva família, generació a generació':'Dibuixa la teva família';
+}
+function fit(){render();const w=$('wrap').clientWidth;Z=Math.min(1,Math.max(.3,(w-8)/Math.max(LL.w,320)));render()}
+function zoom(f){Z=Math.min(2,Math.max(.25,Z*f));render()}
+$('zi').onclick=()=>zoom(1.2);$('zo').onclick=()=>zoom(1/1.2);$('zf').onclick=fit;
+$('wrap').addEventListener('wheel',e=>{if(e.ctrlKey){e.preventDefault();zoom(e.deltaY<0?1.1:1/1.1)}},{passive:false});
+$('q').oninput=e=>{Q=e.target.value;render()};
+$('th').onclick=()=>{const r=document.documentElement,d=r.dataset.theme==='dark'||(!r.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);r.dataset.theme=d?'light':'dark'};
+
+function opts(sel,ex,v){
+  $(sel).innerHTML='<option value="">—</option>'+P.filter(p=>p.id!==ex).map(p=>`<option value="${p.id}">${esc(p.n||'Sense nom')}</option>`).join('');
+  $(sel).value=v||'';
+}
+function pv(){const e=$('pv');e.style.backgroundImage=ph?`url(${ph})`:'';e.textContent=ph?'':ini($('n').value)}
+function edit(id){
+  cur=id;const p=P.find(q=>q.id===id)||{};ph=p.ph||'';
+  $('ft').textContent=id?'Edita persona':'Nova persona';
+  $('n').value=p.n||'';$('b').value=p.b||'';$('x').value=p.x||'';$('s').value=p.s||'o';$('nt').value=p.nt||'';
+  opts('fa',id,p.fa);opts('mo',id,p.mo);opts('sp',id,p.sp);pv();
+  $('del').style.display=$('rel').style.display=id?'':'none';
+  if(!$('dlg').open)$('dlg').showModal();
+}
+$('n').oninput=pv;
+$('add').onclick=$('e1').onclick=()=>edit(null);
+$('e2').onclick=()=>{P=JSON.parse(JSON.stringify(DEMO));save();fit()};
+$('cn').onclick=()=>$('dlg').close();
+$('pb').onclick=()=>$('fi').click();
+$('px').onclick=()=>{ph='';pv()};
+$('fi').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{const im=new Image();im.onload=()=>{
+    const c=document.createElement('canvas');c.width=c.height=128;const t=c.getContext('2d'),m=Math.min(im.width,im.height);
+    t.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,128,128);ph=c.toDataURL('image/jpeg',.8);pv()};im.src=r.result};
+  r.readAsDataURL(f);e.target.value='';
+};
+function saveForm(){
+  const d={n:$('n').value.trim(),b:$('b').value.trim(),x:$('x').value.trim(),s:$('s').value,fa:$('fa').value,mo:$('mo').value,sp:$('sp').value,nt:$('nt').value.trim(),ph};
+  let p=cur&&P.find(q=>q.id===cur);
+  if(!p){p={id:uid()};P.push(p)}
+  const old=p.sp;Object.assign(p,d);
+  if(old&&old!==p.sp){const o=P.find(q=>q.id===old);if(o&&o.sp===p.id)o.sp=''}
+  if(p.sp){const o=P.find(q=>q.id===p.sp);if(o)o.sp=p.id}
+  cur=p.id;save();return p;
+}
+$('sv').onclick=()=>{saveForm();render();$('dlg').close()};
+$('rel').onclick=e=>{
+  const k=e.target.dataset&&e.target.dataset.k;if(!k)return;
+  const p=saveForm(),o={id:uid(),s:'o'},sp=P.find(q=>q.id===p.sp);
+  if(k==='sp'){if(p.sp)return alert('Ja té parella.');o.sp=p.id;p.sp=o.id;o.s=p.s==='m'?'f':p.s==='f'?'m':'o'}
+  if(k==='ch'){if(p.s==='f'){o.mo=p.id;o.fa=p.sp||''}else{o.fa=p.id;o.mo=p.sp||''}}
+  if(k==='pa'){
+    if(!p.fa){o.s='m';p.fa=o.id;if(p.mo){o.sp=p.mo;const m=P.find(q=>q.id===p.mo);if(m)m.sp=o.id}}
+    else if(!p.mo){o.s='f';p.mo=o.id;o.sp=p.fa;const m=P.find(q=>q.id===p.fa);if(m)m.sp=o.id}
+    else return alert('Ja té pare i mare.');
+  }
+  P.push(o);save();render();edit(o.id);
+};
+$('del').onclick=()=>{
+  if(!confirm('Segur que vols eliminar aquesta persona?'))return;
+  P=P.filter(p=>p.id!==cur);P.forEach(p=>['fa','mo','sp'].forEach(k=>{if(p[k]===cur)p[k]=''}));
+  save();render();$('dlg').close();
+};
+$('bk').onclick=()=>{$('ta').value=JSON.stringify(P);$('bd').showModal()};
+$('bc').onclick=()=>$('bd').close();
+$('cp').onclick=async()=>{try{await navigator.clipboard.writeText($('ta').value)}catch(e){$('ta').select()}};
+$('ld').onclick=()=>{try{const a=JSON.parse($('ta').value);if(!Array.isArray(a))throw 0;P=a;save();fit();$('bd').close()}catch(e){alert('Les dades no són vàlides.')}};
+fit();
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+</html>
